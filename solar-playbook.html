@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Lean Solar Acquisition Playbook · Converxio</title>
+<meta name="description" content="Meta Ads, targeting, and a CRM setup that books real homeowners. Built for AU solar installers.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --purple: #7021fb;
+    --purple-soft: #f3edff;
+    --purple-deep: #4a0fb8;
+    --ink: #0a0a0f;
+    --ink-soft: #2a2a35;
+    --ink-mute: #6b6b78;
+    --paper: #ffffff;
+    --paper-warm: #faf9f7;
+    --line: #e8e6e1;
+    --line-soft: #f0eeea;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background: #ddd;
+  }
+
+  /* ======== PRINT SETUP ======== */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  @media print {
+    html, body { background: white; }
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .page { margin: 0 !important; box-shadow: none !important; }
+  }
+
+  /* ======== PAGE STRUCTURE ======== */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 22mm 22mm 18mm;
+    background: var(--paper);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+    margin: 16px auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page:last-child { page-break-after: auto; }
+
+  /* ======== HEADER (page 2+) ======== */
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 32px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .page-head .brand {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .page-head .brand span {
+    color: var(--purple);
+  }
+
+  /* ======== FOOTER ======== */
+  .page-foot {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ======== COVER (page 1) ======== */
+  .cover {
+    padding: 0;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(112,33,251,0.10) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cover-inner {
+    padding: 32mm 22mm 22mm;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute);
+  }
+
+  .cover-top .brand {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .cover-top .brand span { color: var(--purple); }
+
+  .cover-mid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .cover-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    background: var(--purple-soft);
+    color: var(--purple);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    width: fit-content;
+  }
+  .cover-eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--purple);
+    border-radius: 50%;
+  }
+
+  .cover h1 {
+    font-size: 60px;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    color: var(--ink);
+    margin: 0;
+    max-width: 540px;
+  }
+  .cover h1 em {
+    font-style: normal;
+    color: var(--purple);
+  }
+
+  .cover-sub {
+    font-size: 18px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 480px;
+    font-weight: 400;
+  }
+
+  .cover-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+
+  .cover-author {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cover-author .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .cover-author .name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .cover-toc {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    line-height: 1.5;
+  }
+  .cover-toc-item {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+  .cover-toc-item .num { color: var(--purple); }
+
+  /* ======== CONTENT PAGES ======== */
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--purple);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-num::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--purple);
+  }
+
+  h2.section-title {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 18px;
+    max-width: 480px;
+  }
+  h2.section-title em {
+    font-style: normal;
+    color: var(--purple);
+  }
+
+  .section-intro {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    max-width: 560px;
+    margin-bottom: 24px;
+  }
+
+  /* ======== TIP BLOCKS ======== */
+  .tips {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .tip {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 22px;
+    background: var(--paper);
+  }
+  .tip:hover { border-color: var(--purple); }
+
+  .tip-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--purple);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .tip h3 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .tip p {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+  }
+
+  /* ======== Q&A LIST ======== */
+  .qa-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .qa {
+    border-left: 3px solid var(--purple);
+    padding: 4px 0 4px 16px;
+  }
+  .qa h4 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .qa p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ======== STAGES + AUTOMATIONS ======== */
+  .stage-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 24px;
+    margin-bottom: 22px;
+  }
+  .stage {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+  .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--purple);
+    font-weight: 600;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  /* ======== CHECKLIST ======== */
+  .checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .check {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .check:last-child { border-bottom: none; }
+  .check-day {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--purple);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .check-content h4 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .check-content p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+
+  /* ======== CTA BLOCK ======== */
+  .cta-block {
+    background: var(--ink);
+    color: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-top: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-block::before {
+    content: '';
+    position: absolute;
+    top: 50%; right: -120px;
+    transform: translateY(-50%);
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(112,33,251,0.35) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .cta-block-inner { position: relative; z-index: 1; }
+  .cta-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: #c9a3ff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .cta-block h3 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .cta-block h3 em {
+    font-style: normal;
+    color: #c9a3ff;
+  }
+  .cta-block p {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.55;
+    margin-bottom: 16px;
+    max-width: 460px;
+  }
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--purple);
+    color: white;
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .cta-link::after { content: '→'; }
+
+  /* ======== UTILS ======== */
+  .pull {
+    border-left: 3px solid var(--purple);
+    padding: 8px 0 8px 18px;
+    margin: 18px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.45;
+    max-width: 540px;
+  }
+
+  .small-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-mute);
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ============ PAGE 1 / COVER ============ -->
+<section class="page cover">
+  <div class="cover-inner">
+    <div class="cover-top">
+      <div class="brand">CONVERXIO<span>.</span></div>
+      <div>The Lean Solar Playbook · 2026</div>
+    </div>
+
+    <div class="cover-mid">
+      <div class="cover-eyebrow">
+        <span class="cover-eyebrow-dot"></span>
+        For AU solar installers
+      </div>
+      <h1>The lean solar acquisition <em>playbook</em>.</h1>
+      <p class="cover-sub">
+        Meta Ads, targeting, and a GoHighLevel setup that books real homeowner appointments. Specific to Australia. Built to ship in 7 days.
+      </p>
+    </div>
+
+    <div class="cover-bottom">
+      <div class="cover-author">
+        <span class="label">Written by</span>
+        <span class="name">Vic, founder of Converxio</span>
+      </div>
+      <div class="cover-toc">
+        <div class="cover-toc-item"><span class="num">01</span><span>Ad creative fixes</span></div>
+        <div class="cover-toc-item"><span class="num">02</span><span>Targeting + STC zones</span></div>
+        <div class="cover-toc-item"><span class="num">03</span><span>Form qualification</span></div>
+        <div class="cover-toc-item"><span class="num">04</span><span>GHL CRM setup</span></div>
+        <div class="cover-toc-item"><span class="num">05</span><span>7-day launch</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 / AD CREATIVE ============ -->
+<section class="page">
+  <div class="page-head">
+    <div class="brand">CONVERXIO<span>.</span></div>
+    <div>02 / 07 · Ad creative</div>
+  </div>
+
+  <div class="section-num">01 / Ad creative</div>
+  <h2 class="section-title">Three fixes that move CPL in <em>AU solar</em>.</h2>
+
+  <p class="section-intro">
+    Most solar ads fail at the same place: they lead with a panel price. The homeowner is shopping for a smaller power bill and the federal rebate before it shrinks. Match the ad to that, and the lead quality moves.
+  </p>
+
+  <div class="tips">
+    <div class="tip">
+      <div class="tip-tag">Fix 01 · Angle</div>
+      <h3>Lead with bill savings, not the system price.</h3>
+      <p>"Cut your power bill by 70%" beats "6.6kW system, $5,990" every time. Lead the headline with the savings story. Drop the dollar amount once they're listening, not before.</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-tag">Fix 02 · Pricing frame</div>
+      <h3>Quote in installments, not lump sums.</h3>
+      <p>$7K upfront kills the click. $58/week absorbs into the budget like the bill they already pay. Reframe pricing as a weekly or monthly installment, ideally tied to the bill amount it replaces. "From $58/week, less than your current bill" outperforms a sticker price every time we test it.</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-tag">Fix 03 · Imagery</div>
+      <h3>Use real install photos. Skip the AI renders.</h3>
+      <p>AI-generated solar imagery looks generic. Wonky panels, weird Australian-but-not-quite homes, suspicious shadows. Use actual photos from your installs. Phone-shot is fine if the install is clean. Authenticity beats polish in this niche.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    Rule of thumb: your ad headline should describe the future. "Lower bill, locked-in rebate, panels next month." The price comes after the click.
+  </div>
+
+  <div class="page-foot">
+    <div>converxio.io</div>
+    <div>02</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 3 / TARGETING ============ -->
+<section class="page">
+  <div class="page-head">
+    <div class="brand">CONVERXIO<span>.</span></div>
+    <div>03 / 07 · Targeting</div>
+  </div>
+
+  <div class="section-num">02 / Targeting</div>
+  <h2 class="section-title">Target like a local installer, <em>not a generic media buyer</em>.</h2>
+
+  <p class="section-intro">
+    Most generalist agencies stop at "homeowners 30-65, interested in renewable energy." That's lazy. Stack postcode, income, and STC zone deliberately, then let federal policy do the urgency work for you.
+  </p>
+
+  <div class="tips">
+    <div class="tip">
+      <div class="tip-tag">Tactic 01 · Zones</div>
+      <h3>Postcode lists tied to STC zones.</h3>
+      <p>Pull every postcode you actively service. Map each one to its STC zone (1 to 4). Build location targeting around postcode lists, not radius miles. This lets you write zone-specific ad copy. "Sydney homeowners, your 6.6kW rebate locks in by Dec 31" converts harder than a generic rebate line.</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-tag">Tactic 02 · Audience stack</div>
+      <h3>Income, age, and exclusions.</h3>
+      <p>Layer top 25 to 50% household income, age 35 to 65, and exclude renters via interest stack. Solar is a 25-year asset. Younger homeowners often haven't decided to stay. Renters can't install at all. Filter both before they ever see your ad.</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-tag">Tactic 03 · Year-end push</div>
+      <h3>Use the STC drop as a real deadline.</h3>
+      <p>Every January 1st, the rebate shrinks because the deeming period drops by one year. Run a December push that names the drop directly. "Your Zone 3 rebate drops on Jan 1, 2027" is a deadline you didn't have to invent. Federal policy does the work. Use it.</p>
+    </div>
+  </div>
+
+  <p class="small-note">
+    Note on STC zones: Zone 1 (top of NT, far north QLD) generates the most STCs per kW. Zone 2 (most of WA, central QLD). Zone 3 (NSW, VIC, SA, southern QLD, WA south, where most installs happen). Zone 4 (Tasmania, far southern VIC). Verify current deeming numbers with the Clean Energy Regulator before publishing specifics.
+  </p>
+
+  <div class="page-foot">
+    <div>converxio.io</div>
+    <div>03</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 4 / QUALIFICATION ============ -->
+<section class="page">
+  <div class="page-head">
+    <div class="brand">CONVERXIO<span>.</span></div>
+    <div>04 / 07 · Qualification</div>
+  </div>
+
+  <div class="section-num">03 / Qualification</div>
+  <h2 class="section-title">Five form questions that <em>kill bad leads</em> before your closer sees them.</h2>
+
+  <p class="section-intro">
+    Cheap leads are expensive when they don't close. The form is your first filter. Five questions, no more. Each one earns its place by removing a specific bad-fit prospect.
+  </p>
+
+  <div class="qa-list">
+    <div class="qa">
+      <h4>1. Are you the homeowner?</h4>
+      <p>Yes/No. Renters never need to enter your CRM. Auto-route a "no" to a polite exit message.</p>
+    </div>
+    <div class="qa">
+      <h4>2. What's your postcode?</h4>
+      <p>Maps to STC zone for ad copy personalisation, and lets you confirm they're in your install radius before the call.</p>
+    </div>
+    <div class="qa">
+      <h4>3. What's your average quarterly power bill?</h4>
+      <p>Set a minimum (e.g. $400+ AUD per quarter). Below that, the savings math doesn't work. Don't waste closer time on $200-bill households.</p>
+    </div>
+    <div class="qa">
+      <h4>4. What's your roof type?</h4>
+      <p>Tile, tin, asphalt, flat. Some installers handle all, some don't. Filter for what your team actually installs and quotes confidently.</p>
+    </div>
+    <div class="qa">
+      <h4>5. When are you looking to install?</h4>
+      <p>Now / 1 to 3 months / 3 to 6 months / browsing. The "browsing" answer tags them for nurture, not a call. Closers focus on the first three.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    Five short questions feel light to fill out. They remove tenants, bill-too-low households, out-of-area leads, wrong-roof leads, and not-ready browsers. That's a lot of waste filtered for a 30-second form.
+  </div>
+
+  <div class="page-foot">
+    <div>converxio.io</div>
+    <div>04</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 5 / GHL ============ -->
+<section class="page">
+  <div class="page-head">
+    <div class="brand">CONVERXIO<span>.</span></div>
+    <div>05 / 07 · GHL CRM</div>
+  </div>
+
+  <div class="section-num">04 / GHL CRM</div>
+  <h2 class="section-title">A GoHighLevel pipeline you can build <em>in an afternoon</em>.</h2>
+
+  <p class="section-intro">
+    Five stages, three automations, one calendar. That's the whole CRM for a solo or small-team solar installer. Skip the 50-stage rabbit hole.
+  </p>
+
+  <div class="tip" style="margin-bottom: 16px;">
+    <div class="tip-tag">The pipeline</div>
+    <h3>5 stages, in order.</h3>
+    <div class="stage-list" style="margin-top: 12px; margin-bottom: 0;">
+      <div class="stage"><span class="stage-num">01</span><span><strong>New enquiry.</strong> Fresh form submit, unqualified.</span></div>
+      <div class="stage"><span class="stage-num">02</span><span><strong>Qualified.</strong> Form passed, contact verified by SMS or call.</span></div>
+      <div class="stage"><span class="stage-num">03</span><span><strong>Sit booked.</strong> Appointment on the closer's calendar.</span></div>
+      <div class="stage"><span class="stage-num">04</span><span><strong>Quoted.</strong> Closer sent a written quote, awaiting decision.</span></div>
+      <div class="stage"><span class="stage-num">05</span><span><strong>Installed.</strong> Deal closed, panels on the roof.</span></div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-tag">The 3 automations that earn their keep</div>
+    <h3>Speed-to-lead, no-show recovery, long-cycle nurture.</h3>
+    <p style="margin-bottom: 8px;"><strong>Speed-to-lead SMS, fired within 60 seconds:</strong> "Hey [first_name], thanks for the enquiry on solar for your home in [suburb]. I'm [closer_name] from [company]. Got 2 minutes to chat now or want me to call tomorrow morning?"</p>
+    <p style="margin-bottom: 8px;"><strong>No-show recovery, fired 5 minutes after a missed appointment:</strong> "Looks like we missed you, no stress. Want to grab another time? [reschedule_link]"</p>
+    <p><strong>Long-cycle nurture for "browsing" leads:</strong> a 5-touch sequence over 60 days. Soft education, no hard pitch. Keeps you front of mind for when the bill jumps and they're ready to act.</p>
+  </div>
+
+  <p class="small-note">
+    Before you launch: pixel and Meta Conversions API verified by the GHL form firing a real test event. Most installers skip this and lose 30% or more of their attribution. Don't be one of them.
+  </p>
+
+  <div class="page-foot">
+    <div>converxio.io</div>
+    <div>05</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 6 / LAUNCH ============ -->
+<section class="page">
+  <div class="page-head">
+    <div class="brand">CONVERXIO<span>.</span></div>
+    <div>06 / 07 · Launch</div>
+  </div>
+
+  <div class="section-num">05 / Launch</div>
+  <h2 class="section-title">Seven days to launch. <em>No fluff.</em></h2>
+
+  <p class="section-intro">
+    Most agencies take 60 days. You don't have 60 days. Here's the schedule that gets a properly built solar campaign live in a working week.
+  </p>
+
+  <div class="checklist">
+    <div class="check">
+      <div class="check-day">Day 1</div>
+      <div class="check-content">
+        <h4>Audit current setup</h4>
+        <p>What's running, what's broken, what to keep. Pull last 90 days of Meta data and current GHL state.</p>
+      </div>
+    </div>
+    <div class="check">
+      <div class="check-day">Day 2</div>
+      <div class="check-content">
+        <h4>Build GHL pipeline and automations</h4>
+        <p>5 stages, 3 automations, calendar wired. Test each automation with a fake submit end-to-end.</p>
+      </div>
+    </div>
+    <div class="check">
+      <div class="check-day">Day 3</div>
+      <div class="check-content">
+        <h4>Set up the lead form and verify pixel</h4>
+        <p>5 qualifying questions live. Pixel and Conversions API confirmed firing on submit, not just on page load.</p>
+      </div>
+    </div>
+    <div class="check">
+      <div class="check-day">Day 4</div>
+      <div class="check-content">
+        <h4>Produce 3 creatives, 3 angles</h4>
+        <p>Bill savings, installment pricing, year-end deadline. Static is fine. Real install photos beat polished video in this niche.</p>
+      </div>
+    </div>
+    <div class="check">
+      <div class="check-day">Day 5</div>
+      <div class="check-content">
+        <h4>Build the campaign</h4>
+        <p>2 ad sets under one CBO budget. Audience: top 50% household income, age 35-65, postcode list, exclude renters. Each ad set runs a different offer angle head-to-head.</p>
+      </div>
+    </div>
+    <div class="check">
+      <div class="check-day">Day 6</div>
+      <div class="check-content">
+        <h4>Final QA</h4>
+        <p>Form mapped to the right pipeline stage. Calendar showing closer availability. Speed-to-lead SMS firing. Pixel firing. Ad set toggled on.</p>
+      </div>
+    </div>
+    <div class="check">
+      <div class="check-day">Day 7</div>
+      <div class="check-content">
+        <h4>Launch</h4>
+        <p>Go live in the morning. First lead within 24 hours if pixel learning is decent. Don't touch anything for 48 hours after launch. Let it learn.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <div>converxio.io</div>
+    <div>06</div>
+  </div>
+</section>
+
+<!-- ============ PAGE 7 / CTA ============ -->
+<section class="page cta-page">
+  <div class="page-head">
+    <div class="brand">CONVERXIO<span>.</span></div>
+    <div>07 / 07 · Book a call</div>
+  </div>
+
+  <div class="cta-page-body">
+    <div class="section-num">06 / Next step</div>
+    <h2 class="section-title cta-page-title">Want this <em>built for you</em>?</h2>
+    <p class="section-intro cta-page-intro">
+      You've got the playbook. If you'd rather skip the build and have a specialist set it up in your accounts, here's how that works.
+    </p>
+
+    <div class="cta-block cta-block-large">
+      <div class="cta-block-inner">
+        <div class="cta-tag">Converxio · For AU solar installers</div>
+        <h3>We do this end-to-end. <em>Meta Ads, GoHighLevel, AI follow-up.</em></h3>
+        <p>20-minute audit call. We'll look at your current ads and CRM live, tell you exactly where leads are leaking, and recommend the right path. You'll walk away with at least one fix you can apply this week, whether you hire us or not.</p>
+        <a href="https://www.converxio.io/#cta" class="cta-link">Book a strategy call</a>
+        <p class="cta-block-meta">No long pitch. No pressure. Just math.</p>
+      </div>
+    </div>
+
+    <div class="cta-page-fineprint">
+      <div>
+        <div class="fp-label">What you get on the call</div>
+        <ul class="fp-list">
+          <li>Live audit of your Meta Ads account and CRM</li>
+          <li>Specific leak points called out, not generic advice</li>
+          <li>One fix you can ship this week, no obligation</li>
+          <li>A direct quote if you want us to build the system</li>
+        </ul>
+      </div>
+      <div>
+        <div class="fp-label">Who this is for</div>
+        <ul class="fp-list">
+          <li>AU solar installers doing $500K to $5M annually</li>
+          <li>Closers ready to handle more booked sits</li>
+          <li>Minimum $3K/month in ad spend</li>
+          <li>Willing to use GoHighLevel as the CRM</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <div>converxio.io · Meta Ads + GHL for AU solar, AC, and heatpump installers</div>
+    <div>07</div>
+  </div>
+</section>
+
+<style>
+  /* CTA page extras */
+  .cta-page-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h2.cta-page-title {
+    font-size: 48px;
+    max-width: 540px;
+  }
+
+  .cta-page-intro {
+    margin-bottom: 30px;
+  }
+
+  .cta-block-large {
+    margin-top: 8px;
+    padding: 36px 40px;
+    border-radius: 16px;
+  }
+  .cta-block-large h3 {
+    font-size: 26px;
+    line-height: 1.18;
+    margin-bottom: 14px;
+  }
+  .cta-block-large p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    max-width: 500px;
+  }
+  .cta-block-large .cta-link {
+    padding: 13px 26px;
+    font-size: 14.5px;
+  }
+  .cta-block-meta {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cta-page-fineprint {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 32px;
+  }
+  .fp-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .fp-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .fp-list li {
+    padding: 6px 0 6px 18px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    position: relative;
+  }
+  .fp-list li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    color: var(--purple);
+    font-weight: 700;
+  }
+</style>
+
+</body>
+</html>
